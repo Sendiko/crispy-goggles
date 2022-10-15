@@ -30,7 +30,8 @@ router.get('/users', (req, res) => {
 })
 
 router.post('/users', (req, res) => {
-    res.send('Got a post request at /users')
+    users.push(req.body)
+    res.json(users)
 })
 
 router.put('/users/:id', (req, res) => {
