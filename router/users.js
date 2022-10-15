@@ -35,7 +35,15 @@ router.post('/users', (req, res) => {
 })
 
 router.put('/users/:id', (req, res) => {
-    res.send('Got a put request at /users')
+    const id = req.params.id
+    users.filter(user => {
+        if(user.id == id){
+            user.nama = req.body.nama
+            user.group = req.body.group
+            return user
+        }
+    })
+    res.json(users)
 })
 
 router.delete('/users/:id', (req, res) => {
