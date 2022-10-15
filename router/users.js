@@ -2,8 +2,31 @@
 const express = require('express')
 const router = express.Router()
 
+const users = [
+    {
+        id : 1, 
+        nama : "Jisoo Kim", 
+        group : "BLACKPINK"
+    },
+    {
+        id : 2, 
+        nama : "Jennie Kim", 
+        group : "BLACKPINK"
+    },
+    {
+        id : 3, 
+        nama : "Chaeyoung Park", 
+        group : "BLACKPINK"
+    },
+    {
+        id : 4, 
+        nama : "Lalisa Manoban", 
+        group : "BLACKPINK"
+    },
+]
+
 router.get('/users', (req, res) => {
-    res.send('Got all user data')
+    res.json(users)
 })
 
 router.post('/users', (req, res) => {
