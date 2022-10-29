@@ -1,82 +1,114 @@
-let users = [
-    {
-        id : 1, 
-        nama : "Jisoo Kim", 
-        group : "BLACKPINK"
-    },
-    {
-        id : 2, 
-        nama : "Jennie Kim", 
-        group : "BLACKPINK"
-    },
-    {
-        id : 3, 
-        nama : "Chaeyoung Park", 
-        group : "BLACKPINK"
-    },
-    {
-        id : 4, 
-        nama : "Lalisa Manoban", 
-        group : "BLACKPINK"
-    },
-]
+const users = require('../models/user')
 
 module.exports = {
-    data : (req, res) => {
-        if(users.length > 0){
-            res.json({
-                status : true,
-                data : users,
-                method : req.method,
-                url : req.url
-            })
-        }else{
-            res.json({
-                status : false,
-                data : "No Data",
-                method : req.method,
-                url : req.url
-            })
-        }
-    },
-    store : (req, res) => {
-        users.push(req.body)
-        res.json({
-            status : true,
-            message : "Data berhasil ditambahkan",
-            data : users,
-            method : req.method,
-            url : req.url
-        })
-    },
-    update : (req, res) => {
-        const id = req.params.id
-        users.filter(user => {
-            if(user.id == id){
-                user.nama = req.body.nama
-                user.group = req.body.group
-                return user
-            }
-        })
-        
-        res.json({
-            status : true,
-            message : "Data berhasil diubah",
-            data : users,
-            method : req.method,
-            url : req.url
-        })
-    },
-    delete : (req, res) => {
-        const id = req.params.id
-        users = users.filter(user => user.id != id)
-    
-        res.json({
-            status : true,
-            message : "Data berhasil dihapus",
-            data : users,
-            method : req.method,
-            url : req.url
-        })
-    }
+	data : async (req, res) => {
+		try {
+			const user = await users.find()
+			if(user.length > 0){
+					res.status(200).json({
+						status : true,
+						data : user,
+						method : req.method,
+						url : req.url
+					})
+			}else{
+					res.status(200).json({
+						status : false,
+						data : "No data",
+						method : req.method,
+						url : req.url
+					})
+			}
+		} catch (error) {
+			console.log(error.body)
+			res.status(400).json({
+					status : false,
+					data : error,
+					method : req.method,
+					url : req.url
+			})
+		}
+	},
+	index : async (req, res) => {
+		try {
+			const user = await users.findById(req.params.id, req.body, {
+				new : true, 
+				runValidators : true, 
+			})
+			res.status(200).json({
+				status : true,
+				message : "Data berhasil diubah",
+				data : user,
+				method : req.method,
+				url : req.url
+			})
+		} catch (error) {
+			res.status(500).json({
+				status : false,
+				data : error,
+				method : req.method,
+				url : req.url
+			})
+		}
+	},
+	store : async (req, res) => {
+		try {
+			const userr = users.create(req.body)		
+			res.status(201).json({
+				status : true,
+				message : "Data berhasil ditambahkan",
+				data : userr,
+				method : req.method,
+				url : req.url
+			})
+		} catch (error) {
+			res.status(500).json({
+				status : false,
+				data : error,
+				method : req.method,
+				url : req.url
+			})
+		}
+	},
+	update : async (req, res) => {
+		try {
+			const user = await users.findByIdAndUpdate(req.params.id, req.body, {
+				new : true, 
+				runValidators : true, 
+			})
+			res.status(200).json({
+				status : true,
+				message : "Data berhasil diubah",
+				data : user,
+				method : req.method,
+				url : req.url
+			})
+		} catch (error) {
+			res.status(500).json({
+				status : false,
+				data : error,
+				method : req.method,
+				url : req.url
+			})
+		}
+	},
+	delete : async (req, res) => {
+		try {
+			await users.findByIdAndDelete(req.params.id)	
+			res.json({
+				status : true,
+				message : "Data berhasil dihapus",
+				data : "",
+				method : req.method,
+				url : req.url
+			})
+		} catch (error) {
+			res.status(500).json({
+				status : false,
+				data : error,
+				method : req.method,
+				url : req.url
+			})
+		}
+	}
 }
