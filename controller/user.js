@@ -37,7 +37,7 @@ module.exports = {
 			})
 			res.status(200).json({
 				status : true,
-				message : "Data berhasil diubah",
+				message : "Data berhasil ditampilkam",
 				data : user,
 				method : req.method,
 				url : req.url
@@ -53,11 +53,11 @@ module.exports = {
 	},
 	store : async (req, res) => {
 		try {
-			const userr = users.create(req.body)		
+			const user = await users.create(req.body)		
 			res.status(201).json({
 				status : true,
 				message : "Data berhasil ditambahkan",
-				data : userr,
+				data : user,
 				method : req.method,
 				url : req.url
 			})
@@ -98,7 +98,6 @@ module.exports = {
 			res.json({
 				status : true,
 				message : "Data berhasil dihapus",
-				data : "",
 				method : req.method,
 				url : req.url
 			})
